@@ -332,3 +332,218 @@ Find Pod with highest priority
 ```
 highest priority number means higher priority
 ```
+
+### CASE15: Scheduling Pod Affinity
+
+
+That Pod should be preferred to be only scheduled on Nodes where Pods with label level=restricted are running.
+
+For the topologyKey use kubernetes.io/hostname .
+
+There are no taints on any Nodes which means no tolerations are needed.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    level: hobby
+  name: hobby-project
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+  affinity:
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: level
+              operator: In
+              values:
+              - restricted
+          topologyKey: kubernetes.io/hostname
+```
+
+### CASE16: Scheduling Pod Anti Affinity
+
+There is a Pod YAML provided at /root/hobby.yaml .
+
+That Pod should be required to be only scheduled on Nodes where no Pods with label level=restricted are running.
+
+For the topologyKey use kubernetes.io/hostname .
+
+There are no taints on any Nodes which means no tolerations are needed.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    level: hobby
+  name: hobby-project
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: level
+            operator: In
+            values:
+            - restricted
+        topologyKey: kubernetes.io/hostname
+  containers:
+  - image: nginx:alpine
+    name: c
+```
+
+### CASE17: Create a DaemonSet that configures Nodes
+
+Create a DaemonSet named configurator , it should:
+
+be in Namespace configurator
+use image bash
+mount /configurator as HostPath volume on the Node it's running on
+write aba997ac-1c89-4d64 into file /configurator/config on its Node via the command: section
+be kept running using sleep 1d or similar after the file write command
+
+
+```
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: configurator
+  namespace: configurator
+  labels:
+    k8s-app: configurator
+spec:
+  selector:
+    matchLabels:
+      name: configurator
+  template:
+    metadata:
+      labels:
+        name: configurator 
+    spec:
+      containers:
+      - name: fluentd-elasticsearch
+        image: bash
+        command: ['sh', '-c', 'echo "aba997ac-1c89-4d64" > /configurator/config  && sleep 3600']
+        volumeMounts:
+        - name: varlog
+          mountPath: /configurator
+      # it may be desirable to set a high priority class to ensure that a DaemonSet Pod
+      # preempts running Pods
+      # priorityClassName: important
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /configurator
+```
+
+### CASE18: Cluster Setup
+
+#### Install Controlplane
+
+There are two VMs controlplane and node-summer , create a two Node Kubeadm Kubernetes cluster with them.
+
+Kubeadm, kubelet and kubectl are already installed.
+
+First make controlplane the controlplane. For this we should:
+
+Use Kubernetes version v1.34.1
+Use a Pod-Network-Cidr of 192.168.0.0/16
+Ignore preflight errors for NumCPU and Mem
+Copy the default kubectl admin.conf to /root/.kube/config
+
+```
+kubeadm init --kubernetes-version=1.34.1 --pod-network-cidr 192.168.0.0/16 --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem
+
+cp /etc/kubernetes/admin.conf /root/.kube/config
+
+kubectl version
+
+kubectl get pod -A
+```
+
+#### Add Worker Node
+
+```
+kubeadm token create --print-join-command
+```
+
+```
+kubeadm join 172.30.1.2:6443 --token t5xera.xz0d8h07l4g58ohx \
+        --discovery-token-ca-cert-hash sha256:e0c74237052c5529f1598b1cca6b2c814875ae951f8114e849fefe44dd0d8486
+```
+
+
+### CASE19: Cluster Upgrade
+> Upgrade Controlplane
+
+Upgrade the controlplane Node to a newer patch version.
+
+Also upgrade kubectl and kubelet .
+
+```
+# see possible versions
+kubeadm upgrade plan
+
+# show available versions
+apt-cache show kubeadm
+
+# can be different for you
+apt-get install kubeadm=1.34.3-1.1
+
+# could be a different version for you, it can also take a bit to finish!
+kubeadm upgrade apply v1.34.3
+```
+
+```
+# can be a different version for you
+apt-get install kubectl=1.34.3-1.1 kubelet=1.34.3-1.1
+
+service kubelet restart
+```
+
+
+> Upgrade Worker Node
+
+```
+apt-get install kubeadm=1.34.3-1.1
+kubeadm upgrade node
+```
+
+```
+apt-get install kubelet=1.34.3-1.1
+
+service kubelet restart
+```
+
+### CASE20: Cluster Node Join
+Join Node using Kubeadm
+
+```
+kubeadm token create --print-join-command
+```
+
+```
+kubeadm join 172.30.1.2:6443 --token 149l9e.q5i47tqdhe3xeh8w --discovery-token-ca-cert-hash sha256:7c0d0a78ebc5a980dfc06ba2d292c14daf3210b3f460e431951f6d58e626bfb6
+```
+
+### CASE21:  Cluster Certificate Management
+
+```
+kubeadm certs check-expiration
+```
+
+Renew certificates
+
+```
+kubeadm certs renew apiserver
+kubeadm certs renew scheduler.conf
+```
