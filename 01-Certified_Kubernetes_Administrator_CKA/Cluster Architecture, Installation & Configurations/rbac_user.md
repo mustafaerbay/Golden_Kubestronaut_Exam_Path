@@ -5,30 +5,26 @@ User smoke should be allowed to create and delete Pods, Deployments and Stateful
 User smoke should have view permissions (like the permissions of the default ClusterRole named view ) in all Namespaces but not in kube-system .
 Verify everything using kubectl auth can-i .
 
+### RBAC for Namespace applications
 ```
-1) RBAC for Namespace applications
-
-
 k -n applications create role smoke --verb create,delete --resource pods,deployments,sts
 k -n applications create rolebinding smoke --role smoke --user smoke
+```
 
-⁣2) view permission in all Namespaces but not kube-system
+> View permission in all Namespaces but not kube-system
 
-
-As of now it’s not possible to create deny-RBAC in K8s
-
+> As of now it’s not possible to create deny-RBAC in K8s,
 So we allow for all other Namespaces
-
-
+```
 k get ns # get all namespaces
 k -n applications create rolebinding smoke-view --clusterrole view --user smoke
 k -n default create rolebinding smoke-view --clusterrole view --user smoke
 k -n kube-node-lease create rolebinding smoke-view --clusterrole view --user smoke
 k -n kube-public create rolebinding smoke-view --clusterrole view --user smoke
+```
 
-
-Verify
-
+### Verify
+```
 # applications
 k auth can-i create deployments --as smoke -n applications # YES
 k auth can-i delete deployments --as smoke -n applications # YES

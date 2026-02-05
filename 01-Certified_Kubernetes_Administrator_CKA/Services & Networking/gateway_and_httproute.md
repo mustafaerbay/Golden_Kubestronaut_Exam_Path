@@ -1,5 +1,12 @@
 # Create a Gateway and HTTPRoute
 
+A Gateway in Kubernetes is a networking resource that controls external traffic into a cluster, supporting HTTP, HTTPS, TCP, and UDP protocols. It acts as a central entry point, replacing Ingress, and works with GatewayClasses and Routes (HTTPRoute, TCPRoute, UDPRoute) for flexible traffic management.
+
+A GatewayClass defines the implementation of a Gateway , specifying which controller (e.g., NGINX, Istio, Cilium) will manage it. It acts as a template for Gateways, similar to how storageClass works for PersistentVolumes.
+
+Install a basic Gateway resource named my-gateway in the default namespace. The gateway should be based on the gateway class nginx . You can view the gatewayClass with the command kubectl get gatewayclass .
+
+The gateway will be listening on port 80.
 
 ```
 controlplane:~$ kubectl get crds | grep gateway
@@ -16,14 +23,6 @@ snippetsfilters.gateway.nginx.org                     2026-02-01T17:59:48Z
 upstreamsettingspolicies.gateway.nginx.org            2026-02-01T17:59:48Z
 
 ```
-
-A Gateway in Kubernetes is a networking resource that controls external traffic into a cluster, supporting HTTP, HTTPS, TCP, and UDP protocols. It acts as a central entry point, replacing Ingress, and works with GatewayClasses and Routes (HTTPRoute, TCPRoute, UDPRoute) for flexible traffic management.
-
-A GatewayClass defines the implementation of a Gateway , specifying which controller (e.g., NGINX, Istio, Cilium) will manage it. It acts as a template for Gateways, similar to how storageClass works for PersistentVolumes.
-
-Install a basic Gateway resource named my-gateway in the default namespace. The gateway should be based on the gateway class nginx . You can view the gatewayClass with the command kubectl get gatewayclass .
-
-The gateway will be listening on port 80.
 
 ```
 # Deploy a basic Gateway that allows access to port 80 into the cluster

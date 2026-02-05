@@ -12,7 +12,7 @@ kubectl get clusterrole
 
 >Bind the cluster role 'acme-corp-clusterrole' to the service account ’secure-sa’ making sure the 'secure-sa' service account can only create the assigned resources within the default namespace and nowhere else.
 
-Verify that the service account can only create deployments, replicaSets, and daemonSets in the default namespace.
+>Verify that the service account can only create deployments, replicaSets, and daemonSets in the default namespace.
 
 
 ```
