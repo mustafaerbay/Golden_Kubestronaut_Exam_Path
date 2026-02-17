@@ -12,6 +12,8 @@ Add the node to the cluster using kubeadm
 
 ---
 
+### Answer:
+
 ```
 ➜ ssh cka3962
 

@@ -8,7 +8,9 @@ There is ServiceAccount secret-reader in Namespace project-swan. Create a Pod of
 Exec into the Pod and use curl to manually query all Secrets from the Kubernetes Api.
 
 Write the result into file /opt/course/9/result.json.
+---
 
+### Answer:
 #### Create Pod which uses ServiceAccount
 ```
 ➜ ssh cka9412

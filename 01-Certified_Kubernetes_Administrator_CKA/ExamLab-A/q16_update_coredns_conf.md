@@ -16,6 +16,8 @@ nslookup kubernetes.default.svc.cluster.local
 nslookup kubernetes.default.svc.custom-domain
 
 ---
+
+### Answer:
 1.
 
 ```

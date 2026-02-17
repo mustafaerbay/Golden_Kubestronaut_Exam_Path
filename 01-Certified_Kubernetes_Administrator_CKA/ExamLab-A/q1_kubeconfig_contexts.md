@@ -9,7 +9,9 @@ Write the name of the current context into /opt/course/1/current-context
 
 Write the client-certificate of user account-0027 base64-decoded into /opt/course/1/cert
 
+---
 
+### Answer:
 1.
 ```
 k --kubeconfig=/opt/course/1/kubeconfig config get-context -o name > /opt/course/1/contexts

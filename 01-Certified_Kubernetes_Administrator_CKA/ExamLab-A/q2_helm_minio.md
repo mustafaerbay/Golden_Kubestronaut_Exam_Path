@@ -14,11 +14,12 @@ Install the MinIO Operator using Helm in Namespace minio. Then configure and cre
 4. Create the Tenant resource from /opt/course/2/minio-tenant.yaml
 
 ---
+
+### Answer:
 1. 
 ```
 k create ns minio
 namespace/minio created
-
 ```
 
 2. 

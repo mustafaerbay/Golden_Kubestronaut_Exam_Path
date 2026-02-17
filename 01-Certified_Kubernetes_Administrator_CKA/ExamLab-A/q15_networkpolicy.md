@@ -11,7 +11,9 @@ Connect to db2-* Pods on port 2222
 
 Use the app Pod labels in your policy.
 
+---
 
+### Answer:
 ```
 # cka7968:/home/candidate/15_np.yaml
 apiVersion: networking.k8s.io/v1

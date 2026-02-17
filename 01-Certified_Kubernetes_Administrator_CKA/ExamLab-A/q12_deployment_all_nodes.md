@@ -13,7 +13,9 @@ First container named container1 with image nginx:1-alpine
 Second container named container2 with image google/pause
 
 There should only ever be one Pod of that Deployment running on one worker node, use topologyKey: kubernetes.io/hostname for this
+---
 
+### Answer:
 ```
 ➜ ssh cka2556
 

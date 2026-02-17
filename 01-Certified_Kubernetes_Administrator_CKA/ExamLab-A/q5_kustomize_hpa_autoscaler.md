@@ -18,7 +18,9 @@ Using the Kustomize config at /opt/course/5/api-gateway do the following:
 
 4. Apply your changes for staging and prod so they're reflected in the cluster
 
-----
+---
+
+### Answer:
 
 ```
 ➜ candidate@cka5774:~$ cd /opt/course/5/api-gateway

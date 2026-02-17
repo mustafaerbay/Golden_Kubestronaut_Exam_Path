@@ -7,8 +7,9 @@ The metrics-server has been installed in the cluster. Write two bash scripts whi
 Script /opt/course/7/node.sh should show resource usage of nodes
 
 Script /opt/course/7/pod.sh should show resource usage of Pods and their containers
-
 ---
+
+### Answer:
 
 ```
 # cka5774:/opt/course/7/node.sh

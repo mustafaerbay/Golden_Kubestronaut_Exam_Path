@@ -5,6 +5,8 @@ Create a new ServiceAccount processor in Namespace project-hamster. Create a Rol
 
 ---
 
+### Answer:
+
 ```
 ➜ ssh cka3962
 

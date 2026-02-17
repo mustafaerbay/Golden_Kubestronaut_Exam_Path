@@ -12,7 +12,9 @@ Extend the new HTTPRoute with path /auto which forwards to mobile backend if the
 
 The existing Gateway is reachable at http://r500.gateway:30080 which means your implementation should work for these commands:
 
-----
+---
+
+### Answer:
 
 #### Investigate CRDs
 ```

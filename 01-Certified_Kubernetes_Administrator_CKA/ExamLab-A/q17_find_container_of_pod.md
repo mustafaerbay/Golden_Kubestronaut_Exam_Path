@@ -8,7 +8,9 @@ Using command crictl:
 Write the ID of the container and the info.runtimeType into /opt/course/17/pod-container.txt
 
 Write the logs of the container into /opt/course/17/pod-container.log
+---
 
+### Answer:
 ```
 ➜ ssh cka2556
 

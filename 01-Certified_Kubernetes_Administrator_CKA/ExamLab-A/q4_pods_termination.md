@@ -5,7 +5,9 @@ Solve this question on: ssh cka2556
 Check all available Pods in the Namespace project-c13 and find the names of those that would probably be terminated first if the nodes run out of resources (cpu or memory).
 
 Write the Pod names into /opt/course/4/pods-terminated-first.txt.
+---
 
+### Answer:
 ```
 k -n project-c13 describe pod | grep -A 3 -E 'Requests|^Name:'
 ```
